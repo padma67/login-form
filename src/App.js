@@ -1,56 +1,49 @@
 import React, { Component } from 'react';
-//import logo from './logo.svg';
 import './App.css';
 class App extends Component {
 	constructor(props){
 		super(props)
 		this.state={
 			firstName:"",
-			fname:"",
 			lastName:"",
-			lname:"",
 			email:"",
-			temail:"",
 			password:"",
 			confirmpassword:"",
 			maritalStatus:"",
-			tstatus:"",
-			tfood:[],
 			food:[],
+	        view:"",
+	        result:[],
 			country:"",
 			state:"",
 			state1:"",
 			state2:"",
 			state3:"",
-			state4:""
+			state4:"",
+			error:""
 		}
 	}
 	handleFirstname=(event)=>{
-		
 		this.setState({
 			firstName: event.target.value
 		})
-		
 	}
+
 	handlechange1=(event)=>{
 		if (event.key === 'Enter') {
-
-		if (this.state.firstName !== "") {
-          	this.setState({
-              	state:""
-              })
-          	this.setState({
-			fname:this.state.firstName
-		})
+			if (this.state.firstName !== "") {
+				this.setState({
+					state:""
+				})
+          	this.state.result.push(this.state.firstName)
 		
           	this.refs.lastName.focus();
-          }
-          else{
+            }
+            else{
               this.setState({
               	state:"pls fill this field"
-              })
-          }
-      }
+                })
+            }
+        }
 	}
 
 	handlelastname=(event)=>{
@@ -62,14 +55,13 @@ class App extends Component {
 	handlechange2=(event)=>{
 
 		if (event.key === 'Enter') {
+			console.log(this.state.result);
 
 		if (this.state.lastName !== "") {
           	this.setState({
               	state1:""
               })
-          	this.setState({
-			lname:this.state.lastName
-		})
+          	this.state.result.push(this.state.lastName)
 		
           	this.refs.email.focus();
           }
@@ -88,16 +80,13 @@ class App extends Component {
 		
 	}
 	handlechange3=(event)=>{
-if (event.key === 'Enter') {
+		if (event.key === 'Enter') {
 
 		if (this.state.email !== "") {
           	this.setState({
               	state2:""
               })
-          	this.setState({
-			temail:this.state.email
-		})
-		
+          	this.state.result.push(this.state.email)
           	this.refs.password.focus();
           }
           else{
@@ -122,8 +111,8 @@ if (event.key === 'Enter') {
           	this.setState({
               	state3:""
               })
-		
-          	this.refs.confirmpassword.focus();
+          	this.state.result.push(this.state.password)
+           	this.refs.confirmpassword.focus();
           }
           else{
               this.setState({
@@ -138,6 +127,7 @@ if (event.key === 'Enter') {
 			confirmpassword: event.target.value
 		})
 
+
 	}
 	handlechange5=(event)=>{
         
@@ -147,6 +137,7 @@ if (event.key === 'Enter') {
           	this.setState({
               	errors:""
               })
+          	this.state.result.push(this.state.confirmpassword)
           	this.refs.maritalStatus.focus();
           }
           else{
@@ -162,6 +153,8 @@ if (event.key === 'Enter') {
 		this.setState({
 			maritalStatus: event.target.value
 		})
+		this.state.result.push(this.state.maritalStatus)
+          	
 		console.log(this.state.maritalStatus);
 	}
 
@@ -189,6 +182,7 @@ if (event.key === 'Enter') {
 		food:this.state.food
 		})
 		console.log(this.state.food);
+		this.state.result.push(this.state.food)
 	}
 	handlechange7=(event)=>{
 
@@ -196,18 +190,37 @@ if (event.key === 'Enter') {
 			this.refs.submit.focus();
 
 		}
+		
 	}
+
+	handlesubmit=()=>{
+		if(this.state.result.length === 7){		
+		this.setState({
+			view:"block"
+		})
+		this.setState({
+				error:""
+			})
+	    }
+		else{
+			this.setState({
+				error:"pls fill all the above"
+			})
+		}
+		
+	}
+
 
 
   render() {
     return (
      <div>
-     <div style={{width:"35%",height:"455px",position:"absolute",left:"125px",top:'35px',border:"1px solid black"}} >
+     <div style={{width:"35%",height:"555px",position:"absolute",left:"125px",top:'35px',border:"1px solid black"}} >
 
      <form  style={{position:"relative",top:"15px",left:"15px"}} >
      <h1>Login form</h1>
      <label>FirstName :</label>
-     <input type="text" required value={this.state.firstName} onChange={this.handleFirstname} onKeyPress={this.handlechange1} ref="firstName"/><br/>
+     <input type="text" required value={this.state.firstName} onChange={this.handleFirstname} onKeyPress={this.handlechange1} ref="firstName" autoFocus/><br/>
      <p>{this.state.state}</p><br/>
      <label>LastName :</label>
      <input type="text" required value={this.state.lastName} onChange={this.handlelastname} onKeyPress={this.handlechange2} ref="lastName" /><br/>
@@ -216,10 +229,10 @@ if (event.key === 'Enter') {
      <input type="text" required value={this.state.email} onChange={this.handleemail} onKeyPress={this.handlechange3} ref="email" /><br/>
      <p>{this.state.state2}</p><br/>
      <label>Password :</label>
-     <input type="text" value={this.state.password} required onChange={this.handlelpassword} onKeyPress={this.handlechange4} ref="password"/><br/>
+     <input type="password" value={this.state.password} required onChange={this.handlelpassword} onKeyPress={this.handlechange4} ref="password"/><br/>
      <p>{this.state.state3}</p><br/>
      <label>Confirm Password :</label>
-     <input type="text" value={this.state.confirmpassword} required onChange={this.handlelconfirm} onKeyPress={this.handlechange5} ref="confirmpassword" /><br/>
+     <input type="password" value={this.state.confirmpassword} required onChange={this.handlelconfirm} onKeyPress={this.handlechange5} ref="confirmpassword" /><br/>
       <p>{this.state.errors}</p><br/>
       <label>MaritalStatus :</label>
      <input type="radio" required value="single" name="MaritalStatus" onChange={this.handlelstatus} onKeyPress={this.handlechange6} ref="maritalStatus"/>single
@@ -230,28 +243,26 @@ if (event.key === 'Enter') {
      <input type="checkbox" name="food" value="Dhosa" onChange={this.handlefood} onKeyPress={this.handlechange7} ref="food" />Dhosa
      <input type="checkbox" name="food" value="idli" onChange={this.handlefood} onKeyPress={this.handlechange7} ref="food"/>idli
      <br/>
-     <input type="submit" ref="submit"/>
      </form>
-   
-
-
-
-     </div><div style={{width:"35%",height:"455px",position:"absolute",left:"625px",top:'35px',border:"1px solid black"}}  >
-     <h1 style={{marginLeft:"55px"}} >Login Details </h1>
+     <br/>
+     <input type="submit" ref="submit" onClick={this.handlesubmit} />
+     <br/><p>{this.state.error}</p>
+   </div><div style={{width:"35%",height:"555px",position:"absolute",left:"625px",top:'35px',border:"1px solid black"}}  >
+     {this.state.view === ""?"No data available":(<div><h1 style={{marginLeft:"55px"}} >Login Details </h1>
      <div style={{marginLeft:"55px"}}>
      <table>
      <tbody>
      <tr>
      <th>FirstName</th>
-     <td>{this.state.fname}</td>
+     <td>{this.state.firstName}</td>
      </tr><br/>
       <tr>
      <th>LastName</th>
-     <td>{this.state.lname}</td>
+     <td>{this.state.lastName}</td>
      </tr><br/>
       <tr>
      <th>Email</th>
-     <td>{this.state.temail}</td>
+     <td>{this.state.email}</td>
      </tr><br/>
       <tr>
      <th>MaritalStatus</th>
@@ -261,13 +272,10 @@ if (event.key === 'Enter') {
      <th>Food</th>
      <td>{this.state.food}</td>
      </tr><br/>
-      <tr>
-     <th>Country</th>
-     <td>{}</td>
-     </tr>
      
      </tbody>
-     </table></div></div>
+     </table></div></div>)}
+     </div>
     
      </div>
     );
